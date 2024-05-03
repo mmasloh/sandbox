@@ -130,7 +130,7 @@ address=/.ingress.kind.local/172.18.200.1
 address=/last.pool.kind.local/172.18.200.4 
 ```
 
-`address=/.ingress.kind.local/172.18.200.1` is the 'dnsmasq way' to configure wildcard name. So 
+> `address=/.ingress.kind.local/172.18.200.1` is the 'dnsmasq way' to configure wildcard name. So 
 `podinfo.ingress.kind.local` and `skas.ingress.kind.local` will resolve to `172.18.200.1`
 
 These value must now be configured in the Git repository. Edit the file `/clusters/kind/kind/context.yaml`:
@@ -200,47 +200,34 @@ flux bootstrap github \
 --path=clusters/kind/kind/flux
 ```
 
-You can have a look on the deployment by using `k9s`.  It will take several minutes. Be patient.
+You can have a look on the deployment by using `k9s`.  **It will take several minutes. Be patient.**
 
 > There is some stages in the deployment which involve a restart of the API server. This means the cluster will seem 
-frozen for serveral minutes. Again, be patient. 
+frozen for several minutes. Again, be patient. 
 
-At the end, 
+All deployments are instances of `helmRelease` FluxCD resources. The deployment processing ends when all `helmReleases` 
+are in the ready state:
 
 ```
-$ kubectl  get --all-namespaces pods
-NAMESPACE            NAME                                                     READY   STATUS    RESTARTS        AGE
-cert-manager         cert-manager-main-65f6d6d944-cjlwf                       1/1     Running   0               11m
-cert-manager         cert-manager-main-cainjector-7547dfc5d7-227wc            1/1     Running   0               11m
-cert-manager         cert-manager-main-webhook-7576667b65-qtnsh               1/1     Running   0               11m
-cert-manager         trust-manager-5968bdbbfd-vvvrg                           1/1     Running   3 (8m38s ago)   10m
-flux-system          helm-controller-58d5cc6f5b-c52g6                         1/1     Running   2 (8m28s ago)   24m
-flux-system          kad-controller-7b457d7cb-wrmhp                           1/1     Running   0               17m
-flux-system          kustomize-controller-d84b877fb-mqx6h                     1/1     Running   2 (8m34s ago)   24m
-flux-system          notification-controller-77fd94d6d4-ql4s2                 1/1     Running   2 (8m32s ago)   24m
-flux-system          source-controller-7657cffdb-84f5z                        1/1     Running   2 (8m33s ago)   24m
-ingress-nginx        ingress-nginx-main-controller-7f7f57897f-9fzkn           1/1     Running   0               10m
-kube-system          coredns-76f75df574-n2nwf                                 1/1     Running   0               26m
-kube-system          coredns-76f75df574-xvd4d                                 1/1     Running   0               26m
-kube-system          etcd-kind-control-plane                                  1/1     Running   0               26m
-kube-system          kindnet-27mrr                                            1/1     Running   2 (8m30s ago)   26m
-kube-system          kube-apiserver-kind-control-plane                        1/1     Running   0               8m28s
-kube-system          kube-controller-manager-kind-control-plane               1/1     Running   1 (8m55s ago)   26m
-kube-system          kube-proxy-76hn8                                         1/1     Running   0               26m
-kube-system          kube-scheduler-kind-control-plane                        1/1     Running   1 (8m56s ago)   26m
-kube-tools           reloader-main-reloader-55c66fc597-qbhkl                  1/1     Running   0               11m
-kube-tools           replicator-main-kubernetes-replicator-78b7858f66-nqstb   1/1     Running   0               11m
-kube-tools           secret-generator-6455b594b9-mfq9b                        1/1     Running   0               10m
-local-path-storage   local-path-provisioner-7577fdbbfb-fzsg9                  1/1     Running   0               26m
-metallb              metallb-main-controller-5bdfb944b6-59c2g                 1/1     Running   0               11m
-metallb              metallb-main-speaker-lwx9p                               4/4     Running   0               11m
-podinfo              podinfo-main-565c7584d5-kgdf4                            1/1     Running   0               9m21s
-skas-system          skas-main-6c95685d9d-ptbhb                               3/3     Running   0               9m21s```
+$ kubectl get -n flux-system Helmreleases
+NAME                    AGE     READY   STATUS
+cert-manager-issuers    6m30s   True    Helm install succeeded for release cert-manager/cert-manager-issuers.v1 with chart kad-issuers@0.1.0+26b4afce3722
+cert-manager-main       6m31s   True    Helm install succeeded for release cert-manager/cert-manager-main.v1 with chart cert-manager@v1.14.4
+cert-manager-trust      6m31s   True    Helm install succeeded for release cert-manager/cert-manager-trust.v1 with chart trust-manager@v0.9.2
+ingress-nginx-main      6m31s   True    Helm install succeeded for release ingress-nginx/ingress-nginx-main.v1 with chart ingress-nginx@4.10.0
+kad-controller          6m37s   True    Helm install succeeded for release flux-system/kad-controller.v1 with chart kad-controller@0.2.0-a1
+metallb-main            6m30s   True    Helm install succeeded for release metallb/metallb-main.v1 with chart metallb@0.14.4
+metallb-pool            6m30s   True    Helm install succeeded for release metallb/metallb-pool.v1 with chart kad-metallb-pool@0.1.0+26b4afce3722
+podinfo-main            6m31s   True    Helm install succeeded for release podinfo/podinfo-main.v1 with chart podinfo@6.5.4
+reloader-main           6m31s   True    Helm install succeeded for release kube-tools/reloader-main.v1 with chart reloader@1.0.72
+replicator-main         6m31s   True    Helm install succeeded for release kube-tools/replicator-main.v1 with chart kubernetes-replicator@2.9.2
+secret-generator-main   6m31s   True    Helm install succeeded for release kube-tools/secret-generator-main.v1 with chart kubernetes-secret-generator@3.4.0
+skas-main               6m31s   True    Helm upgrade succeeded for release skas-system/skas-main.v2 with chart skas@0.2.2-snapshot
 ```
 
 You should new be able to connect to the sample application `podinfo` by pointing your favorite browser to 
-https://podinfo.ingress.kind.local/. Note, as we currently use only a self-signed certificate, you will have to go 
-through some security warning. See below to fix this.
+[https://podinfo.ingress.kind.local/](https://podinfo.ingress.kind.local/). Note, as we currently use only a 
+self-signed certificate, you will have to go through some security warning. See below to fix this.
 
 ## What is installed
 
@@ -262,7 +249,7 @@ standard RBAC permissions.
 To use SKAS, you will need to install locally a kubectl extension. 
 [Instruction here](https://www.skas.skasproject.com/installation/#installation-of-skas-cli) 
 
-Then, you should follow instruction for the [user guid](https://www.skas.skasproject.com/userguide/). 
+Then, you should follow instruction for the [user guide](https://www.skas.skasproject.com/userguide/). 
 But, for the impatient, here is a quick process:
 
 First, you must configure your local `~/.kube/config` file:
@@ -284,14 +271,14 @@ Password:
 Error from server (Forbidden): nodes is forbidden: User "admin" cannot list resource "nodes" in API group "" at the cluster scope
 ```
 
-The error is fine: We are correctly identified as user 'admin', but this user does not have any rights on the cluster. 
+The error is fine: We are correctly identified as user `admin`, but this user does not have any rights on the cluster. 
 It is only able to manage SKAS users. So, we can bind this user to an existing group, with full rights on the cluster:
 
 ```
 kubectl sk user bind admin "system:masters"
 ```
 
-After logout/login, we can now act as system admin: 
+After logout/login, we can now act as system administrator: 
 
 ```
 $ kubectl sk logout
@@ -315,7 +302,7 @@ Confirm new password:
 Password has been changed sucessfully.
 ```
 
-As `admin` is member of the group `skas-admin', it will be able to create users and grant them some rights:
+As `admin` is member of the group `skas-admin`, it will be able to create users and grant them some rights:
 
 ```
 $ kubectl sk user create larry --commonName "Larry SIMMONS " --email "larry@his-company.com" --password larry123
