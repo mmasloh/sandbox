@@ -2,7 +2,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 ## Index
 
-- [Sandbox: Introduction](#sandbox-introduction)
+- [Introduction](#introduction)
 - [Prerequisite](#prerequisite)
 - [Deployment](#deployment)
   - [cluster creation](#cluster-creation)
@@ -206,7 +206,7 @@ You can have a look on the deployment by using `k9s`.  **It will take several mi
 frozen for several minutes. Again, be patient. 
 
 All deployments are instances of `helmRelease` FluxCD resources. The deployment processing ends when all `helmReleases` 
-are in the ready state:
+are in the 'ready' state:
 
 ```
 $ kubectl get -n flux-system Helmreleases
