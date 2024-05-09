@@ -1,0 +1,10 @@
+
+deployments:
+
+
+  - name: minio1
+    parent: minio-small
+    namespace: minio1
+    vars:
+      ingressName: minio1
+    enabled: true
