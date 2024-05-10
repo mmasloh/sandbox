@@ -3,8 +3,8 @@ deployments:
 
 
   - name: minio1
-    parent: minio-small
+    parent: minio-small-4
     namespace: minio1
     vars:
       ingressName: minio1
-    enabled: false
+    enabled: true
