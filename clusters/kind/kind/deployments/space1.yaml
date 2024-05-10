@@ -4,7 +4,7 @@ deployments:
 
   - name: space1-pgadmin
     component: pgadmin
-    namespace: space1
+    namespace: space1-sys
     vars:
       admin:
         user: admin@pgadmin.com
