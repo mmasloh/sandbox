@@ -8,3 +8,7 @@ deployments:
     vars:
       ingressName: minio1
     enabled: true
+
+  - name: cnpg
+    component: cnpg
+    namespace: cnpg
