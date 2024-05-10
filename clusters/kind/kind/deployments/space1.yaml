@@ -1,0 +1,15 @@
+
+
+deployments:
+
+  - name: space1-pgadmin
+    component: pgadmin
+    namespace: space1
+    vars:
+      admin:
+        user: admin@pgadmin.com
+        password: admin123
+      ingressInfix: space1
+    dependsOn:
+      - deployment: ingress-nginx
+        module: main
