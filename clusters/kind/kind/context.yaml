@@ -6,7 +6,7 @@ context:
     name: kind
 
   apiServer:
-    portOnLocalhost: 51844    # <== To configure
+    portOnLocalhost: 62118    # <== To configure
 
   metallb:
     ipRanges:
