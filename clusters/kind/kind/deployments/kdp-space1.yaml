@@ -1,0 +1,28 @@
+
+
+deployments:
+
+  - name: space1-pgadmin
+    component: pgadmin
+    namespace: space1-sys
+    vars:
+      admin:
+        user: admin@pgadmin.com
+        password: admin123
+      ingressInfix: space1
+    dependsOn:
+      - deployment: ingress-nginx
+        module: main
+
+  - name: space1-hive-metastore
+    component: hive-metastore
+    namespace: space1-sys
+    vars:
+      s3access:
+        url: https://minio.minio1.svc:9000
+        accessKey: minio
+        secretKey: minio123
+    dependsOn:
+      - deployment: cnpg
+        module: main
+
