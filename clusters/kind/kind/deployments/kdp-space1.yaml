@@ -15,6 +15,7 @@ deployments:
         module: main
 
   - name: space1-hive-metastore
+    enabled: false
     component: hive-metastore
     namespace: space1-sys
     vars:
