@@ -225,6 +225,15 @@ components:
             image:
               tag: 0.2.2-snapshot
               pullPolicy: Always
-
-
+          skPadl:
+            enabled: true
+            ldap:
+              bindPassword: mysecret
+            exposure:
+              ssl: true
+              loadBalancer:
+                enabled: true
+                ip: 172.18.200.2 # tcp1.kind.local
+                hosts:
+                  - padl.{{ .Context.cluster.name }}.{{ .Context.rootDomain }}
 

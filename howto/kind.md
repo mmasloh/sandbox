@@ -21,11 +21,15 @@ docker network inspect kind
 cat >$(brew --prefix)/etc/dnsmasq.d/kind <<EOF
 address=/first.pool.kind.local/172.18.200.1 
 address=/.ingress.kind.local/172.18.200.1 
+address=/tcp1.kind.local/172.18.200.2 
+address=/tcp2.kind.local/172.18.200.2 
+address=/tcp3.kind.local/172.18.200.3 
 address=/last.pool.kind.local/172.18.200.4 
 EOF
 
 
 sudo brew services restart dnsmasq
+
 ```
 
 
