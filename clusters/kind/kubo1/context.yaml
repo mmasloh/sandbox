@@ -1,0 +1,19 @@
+# Context specific to a kind cluster named 'kind'
+
+context:
+
+  cluster:
+    name: kubo1
+
+  apiServer:
+    portOnLocalhost: 7443    # <== To configure
+
+  metallb:
+    ipRanges:
+      - first: 172.22.100.6  # <== To configure
+        last: 172.22.100.9   # <== To configure
+
+  ingress:
+    urlRoot: ingress.kubo1.local
+    vip: 172.22.100.6    # <== To configure
+
