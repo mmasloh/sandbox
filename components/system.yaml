@@ -226,6 +226,9 @@ components:
               tag: 0.2.2-snapshot
               pullPolicy: Always
           skPadl:
+            log:
+              mode: dev
+              level: trace
             enabled: true
             ldap:
               bindPassword: mysecret
