@@ -10,10 +10,10 @@ context:
 
   metallb:
     ipRanges:
-      - first: 172.22.100.6  # <== To configure
-        last: 172.22.100.9   # <== To configure
+      - first: 172.18.100.6  # <== To configure
+        last: 172.18.100.9   # <== To configure
 
   ingress:
     urlRoot: ingress.kubo1.local
-    vip: 172.22.100.6    # <== To configure
+    vip: 172.18.100.6    # <== To configure
 

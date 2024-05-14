@@ -7,7 +7,7 @@ Create a 'kind' network to allow fixed IP
 
 ```
 docker network rm kind # If kind was already used.
-docker network create -d=bridge -o com.docker.network.bridge.enable_ip_masquerade=true -o com.docker.network.driver.mtu=65535  --subnet 172.22.0.0/16 kind
+docker network create -d=bridge -o com.docker.network.bridge.enable_ip_masquerade=true -o com.docker.network.driver.mtu=65535  --subnet 172.18.0.0/16 kind
 
 docker network inspect kind
 
@@ -17,22 +17,26 @@ docker network inspect kind
 ```
 
 cat >$(brew --prefix)/etc/dnsmasq.d/kubo1 <<EOF
-address=/lb.kubo1.local/172.22.100.10 
-address=/m0.kubo1.local/172.22.100.0 
-address=/m1.kubo1.local/172.22.100.1 
-address=/m2.kubo1.local/172.22.100.2 
-address=/w0.kubo1.local/172.22.100.3 
-address=/w1.kubo1.local/172.22.100.4 
-address=/w2.kubo1.local/172.22.100.5 
-address=/first.pool.kubo1.local/172.22.100.6 
-address=/.ingress.kubo1.local/172.22.100.6 
-address=/.tcp1.kubo1.local/172.22.100.7 
-address=/.tcp2.kubo1.local/172.22.100.8 
-address=/.tcp3.kubo1.local/172.22.100.9
-address=/last.pool.kubo1.local/172.22.100.9 
+address=/lb.kubo1.local/172.18.100.10 
+address=/m0.kubo1.local/172.18.100.0 
+address=/m1.kubo1.local/172.18.100.1 
+address=/m2.kubo1.local/172.18.100.2 
+address=/w0.kubo1.local/172.18.100.3 
+address=/w1.kubo1.local/172.18.100.4 
+address=/w2.kubo1.local/172.18.100.5 
+address=/first.pool.kubo1.local/172.18.100.6 
+address=/.ingress.kubo1.local/172.18.100.6 
+address=/.tcp1.kubo1.local/172.18.100.7 
+address=/.tcp2.kubo1.local/172.18.100.8 
+address=/.tcp3.kubo1.local/172.18.100.9
+address=/last.pool.kubo1.local/172.18.100.9 
 EOF
 
 sudo brew services restart dnsmasq
+
+```
+
+```
 
 cat >/tmp/kubo1-config.yaml <<EOF
 kind: Cluster
@@ -77,6 +81,22 @@ flux bootstrap github \
 
 
 ```
+
+
+
+
+```
+kubectl sk init https://skas.ingress.kubo1.local
+kubectl sk init https://skas.ingress.kubo1.local --force
+
+
+kubectl sk login admin admin
+kubectl sk user create sa --commonName "Serge ALEXANDRE" --email "sa@broadsoftware.com" --password as
+kubectl sk user bind sa "system:masters"
+kubectl sk user bind sa "skas-admin"
+kubectl sk logout
+```
+
 
 
 
