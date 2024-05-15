@@ -39,6 +39,8 @@ components:
           path: ./charts/dex/2.36.0
         values: |
           nameOverride: podinfo-dex
+          logger:
+            level: debug
           ingress:
             host: dex.podinfo.{{ .Context.ingress.urlRoot }}
             clusterIssuer: {{ .Context.certificateIssuer.public  }}
