@@ -61,7 +61,12 @@ components:
             host: podinfo.{{ .Context.ingress.urlRoot }}
             clusterIssuer: {{ .Context.certificateIssuer.public  }}
           oidc:
-            clientID: "pi-dg"
+            clientID
+              value: "pi-dg"
+            clientSecret:
+              secret:  
+                name: pi-dg-client-secret
+              key: clientSecret              
             issuerURL: https://dex.podinfo.{{ .Context.ingress.urlRoot }}/dex
             ca:
               crt: {{ .Context.publicCA }}
