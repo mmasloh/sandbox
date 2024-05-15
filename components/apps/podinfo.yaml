@@ -62,11 +62,13 @@ components:
             clusterIssuer: {{ .Context.certificateIssuer.public  }}
           oidc:
             clientID
-              value: "pi-dg"
+              secret:  
+                name: pi-dg-client-secret
+                key: clientId              
             clientSecret:
               secret:  
                 name: pi-dg-client-secret
-              key: clientSecret              
+                key: clientSecret              
             issuerURL: https://dex.podinfo.{{ .Context.ingress.urlRoot }}/dex
             ca:
               crt: {{ .Context.publicCA }}
