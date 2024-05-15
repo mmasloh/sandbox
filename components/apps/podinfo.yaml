@@ -38,23 +38,30 @@ components:
         chart:
           path: ./charts/dex/2.36.0
         values: |
+          nameOverride: podinfo-dex
           ingress:
             host: dex.podinfo.{{ .Context.ingress.urlRoot }}
             clusterIssuer: {{ .Context.certificateIssuer.public  }}
           firstStaticClient:
+            name: "podinfo"
+            id: "pi-dg"
             redirectURIs:
               - https://podinfo.{{ .Context.ingress.urlRoot }}/dg_callback
           connectors:
-            {{- toYaml (get .Context.dex.connectors .Vars.dex.connector)  | nindent 12}}
+            {{- toYaml (get .Context.dex.connectors .Vars.dex.connector)  | nindent 12 }}
       - name: dexgate
         source: kdp2
         chart:
           path: ./charts/dexgate/0.1.2
         values: |
+          nameOverride: podinfo-dexgate
+          proxy:
+            targetUrl: podinfo-main:9898
           ingress:
             host: podinfo.{{ .Context.ingress.urlRoot }}
             clusterIssuer: {{ .Context.certificateIssuer.public  }}
           oidc:
+            id: "pi-dg"
             issuerURL: https://dex.podinfo.{{ .Context.ingress.urlRoot }}/dex
             ca:
               crt: {{ .Context.publicCA }}
