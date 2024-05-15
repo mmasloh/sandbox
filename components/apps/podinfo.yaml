@@ -61,7 +61,7 @@ components:
             host: podinfo.{{ .Context.ingress.urlRoot }}
             clusterIssuer: {{ .Context.certificateIssuer.public  }}
           oidc:
-            clientID
+            clientID:
               secret:  
                 name: pi-dg-client-secret
                 key: clientId              
