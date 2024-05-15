@@ -2,6 +2,7 @@
 deployments:
 
   - name: podinfo
+    enabled: false
     component: podinfo
     namespace: podinfo
     vars:
