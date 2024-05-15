@@ -56,7 +56,7 @@ components:
         values: |
           nameOverride: podinfo-dexgate
           proxy:
-            targetUrl: podinfo-main:9898
+            targetURL: podinfo-main:9898
           ingress:
             host: podinfo.{{ .Context.ingress.urlRoot }}
             clusterIssuer: {{ .Context.certificateIssuer.public  }}
