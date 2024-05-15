@@ -49,7 +49,7 @@ spec:
           kadFiles:
             - components
             - parents
-      sweepPeriod: 2m # TODO: Set to 1h after setup
+      sweepPeriod: 1m # TODO: Set to 1h after setup
     logger:
       mode: dev
       level: info
