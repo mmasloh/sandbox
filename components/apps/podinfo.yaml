@@ -8,6 +8,12 @@ sources:
 components:
   - name: podinfo
     createNamespace: true
+    vars:
+      allowedUsers: []
+      allowedGroups: []
+      allowedEmails: []
+      dex:
+        connector: skas
     modules:
       - name: main
         source: podinfo
@@ -26,16 +32,33 @@ components:
               type: RuntimeDefault
             runAsUser: 100 # User 'app'
           ingress:
-            enabled: true
-            className: nginx
-            annotations:
-              cert-manager.io/cluster-issuer: {{ .Context.certificateIssuer.public }}
-            hosts:
-              - host: podinfo.{{ .Context.ingress.urlRoot }}
-                paths:
-                  - path: /
-                    pathType: ImplementationSpecific
-            tls:
-              - secretName: podinfo-tls
-                hosts:
-                  - podinfo.{{ .Context.ingress.urlRoot }}
+            enabled: false
+      - name: dex
+        source: kdp2
+        chart:
+          path: ./charts/dex/2.36.0
+        values: |
+          ingress:
+            host: dex.podinfo.{{ .Context.ingress.urlRoot }}
+            clusterIssuer: {{ .Context.certificateIssuer.public  }}
+          firstStaticClient:
+            redirectURIs:
+              - https://podinfo.{{ .Context.ingress.urlRoot }}/dg_callback
+          connectors:
+            {{- toYaml (get .Context.dex.connectors .Vars.dex.connector)  | nindent 12}}
+      - name: dexgate
+        source: kdp2
+        chart:
+          path: ./charts/dexgate/0.1.2
+        values: |
+          ingress:
+            host: podinfo.{{ .Context.ingress.urlRoot }}
+            clusterIssuer: {{ .Context.certificateIssuer.public  }}
+          oidc:
+            issuerURL: https://dex.podinfo.{{ .Context.ingress.urlRoot }}/dex
+            ca:
+              crt: {{ .Context.publicCA }}
+          users:
+            allowedUsers: {{ .Vars.allowedUsers }}
+            allowedGroups: {{ .Vars.allowedGroups }}
+            allowedEmails: {{ .Vars.allowedEmails }}
