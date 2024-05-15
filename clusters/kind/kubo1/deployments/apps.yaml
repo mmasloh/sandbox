@@ -4,6 +4,9 @@ deployments:
   - name: podinfo
     component: podinfo
     namespace: podinfo
+    vars:
+      allowedGroups:
+        - skas-admin
     dependsOn:
       - deployment: ingress-nginx
         module: main
