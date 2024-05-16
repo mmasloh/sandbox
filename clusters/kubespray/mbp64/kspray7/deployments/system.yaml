@@ -34,7 +34,7 @@ deployments:
     namespace: kube-tools
 
   - name: skas
-    enabled: false
+    enabled: true
     component: skas
     namespace: skas-system
     dependsOn:

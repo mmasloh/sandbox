@@ -241,10 +241,10 @@ components:
               tag: 0.2.2-snapshot
               pullPolicy: Always
           skPadl:
+            enabled: false
             log:
               mode: dev
               level: trace
-            enabled: true
             ldap:
               bindPassword: mysecret
             exposure:
