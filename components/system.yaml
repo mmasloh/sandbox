@@ -251,7 +251,7 @@ components:
               ssl: true
               loadBalancer:
                 enabled: true
-                ip: 172.18.200.2 # tcp1.kind.local
+                ip: 192.168.56.72 # padl.kspray7.mbp
                 hosts:
                   - padl.{{ .Context.cluster.name }}.{{ .Context.rootDomain }}
 
