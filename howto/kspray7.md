@@ -18,3 +18,25 @@ sudo brew services restart dnsmasq
 
 ```
 
+Ensure:
+
+```
+$ kubectx
+kubernetes-admin@kspray7.mbp
+```
+
+```
+export GITHUB_USER=SergeAlexandre
+export GITHUB_REPO=sandbox
+export GITHUB_TOKEN=
+
+flux bootstrap github \
+--owner=${GITHUB_USER} \
+--repository=${GITHUB_REPO} \
+--branch=kdp2 \
+--interval 15s \
+--owner kubotal \
+--path=clusters/kubespray/mbp64/kspray7/flux
+
+
+```
