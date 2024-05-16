@@ -201,7 +201,7 @@ components:
         config:
           interval: "1m"
           timeout: "1m"
-          persistentClient: true
+          persistentClient: false
           chart:
             reconcileStrategy: Revision # 'Revision' or  'ChartVersion'
             interval: "1m"
