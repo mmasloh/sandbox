@@ -2,8 +2,6 @@
 
 context:
 
-  rootDomain: local
-
   # This part if for cert-manager configuration
   certIssuers:
     caClusterIssuers:

@@ -216,7 +216,11 @@ components:
               context:
                 name: skas@{{ .Context.cluster.name }}
               cluster:
+                {{- if .Context.apiServer }}
                 apiServerUrl: https://127.0.0.1:{{ .Context.apiServer.portOnLocalhost }}
+                {{- else }}
+                apiServerUrl: https://kubernetes.{{ .Context.ingress.urlRoot }}
+                {{- end }}
             passwordStrength:
               forbidCommon: false    # Test against lists of common password
               minimumScore: 0       # From 0 (Accept anything) to 4

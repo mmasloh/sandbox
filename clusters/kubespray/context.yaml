@@ -1,0 +1,13 @@
+# Context for all kubespray based cluster
+
+
+context:
+
+  rootDomain: mbp
+
+#  storageClass:
+#    data: standard
+#    workspace: standard
+
+  networkPoliciesSupport: true
+

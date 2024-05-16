@@ -2,6 +2,8 @@
 
 context:
 
+  rootDomain: local
+
   storageClass:
     data: standard
     workspace: standard

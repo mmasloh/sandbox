@@ -80,3 +80,15 @@ kubectl sk logout
 ```
 
 
+
+
+cleanup
+
+```
+docker stop $(docker ps -a -q)
+docker container prune --force
+docker volume prune --all --force
+docker network prune --force
+docker image prune --all --force
+
+```
