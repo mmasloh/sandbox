@@ -200,6 +200,8 @@ components:
     createNamespace: true
     modules:
       - name: main
+        config:
+          timeout:  "5m"
         source: skas
         chart:
           name: skas

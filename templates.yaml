@@ -10,7 +10,7 @@ templates:
         interval: "1m"
       install:
         remediation:
-          retries: 0
+          retries: 3
           remediateLastFailure: false
     body: |
       ---
