@@ -4,13 +4,8 @@ context:
 
   cluster:
     name: kspray7
-
-  metallb:
-    ipRanges:
-      - first: 192.168.56.71  # <== To configure
-        last: 192.168.56.74   # <== To configure
+    domain: kspray7.mbp
 
   ingress:
-    urlRoot: ingress.kspray7.mbp
-    vip: 192.168.56.71    # <== To configure
+    url: ingress.kspray7.mbp
 

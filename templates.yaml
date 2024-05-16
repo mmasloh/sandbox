@@ -3,15 +3,15 @@ templates:
   - name: helmRelease
     config:
       interval: "1m"
-      timeout:  "5m"
+      timeout:  "3m"
       persistentClient: true
       chart:
         reconcileStrategy: Revision # 'Revision' or  'ChartVersion'
         interval: "1m"
       install:
         remediation:
-          retries: 5
-          remediateLastFailure: true
+          retries: 0
+          remediateLastFailure: false
     body: |
       ---
       apiVersion: helm.toolkit.fluxcd.io/v2beta2
@@ -91,7 +91,7 @@ templates:
 #       name: pull-github
     body: |
       ---
-      apiVersion: source.toolkit.fluxcd.io/v1beta2
+      apiVersion: source.toolkit.fluxcd.io/v1
       kind: {{ .Meta.source.kind }}
       metadata:
         name: {{ .Meta.source.name }}

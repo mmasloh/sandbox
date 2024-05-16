@@ -42,13 +42,13 @@ components:
           logger:
             level: debug
           ingress:
-            host: dex.podinfo.{{ .Context.ingress.urlRoot }}
+            host: dex.podinfo.{{ .Context.ingress.url }}
             clusterIssuer: {{ .Context.certificateIssuer.public  }}
           firstStaticClient:
             name: "podinfo"
             id: "pi-dg"
             redirectURIs:
-              - https://podinfo.{{ .Context.ingress.urlRoot }}/dg_callback
+              - https://podinfo.{{ .Context.ingress.url }}/dg_callback
           connectors:
             {{- toYaml (get .Context.dex.connectors .Vars.dex.connector)  | nindent 12 }}
       - name: dexgate
@@ -60,7 +60,7 @@ components:
           proxy:
             targetURL: http://podinfo-main:9898
           ingress:
-            host: podinfo.{{ .Context.ingress.urlRoot }}
+            host: podinfo.{{ .Context.ingress.url }}
             clusterIssuer: {{ .Context.certificateIssuer.public  }}
           oidc:
             clientID:
@@ -71,7 +71,7 @@ components:
               secret:  
                 name: pi-dg-client-secret
                 key: clientSecret              
-            issuerURL: https://dex.podinfo.{{ .Context.ingress.urlRoot }}/dex
+            issuerURL: https://dex.podinfo.{{ .Context.ingress.url }}/dex
             ca:
               crt: {{ .Context.publicCA }}
           users:

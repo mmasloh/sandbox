@@ -3,8 +3,6 @@
 
 context:
 
-  rootDomain: mbp
-
 #  storageClass:
 #    data: standard
 #    workspace: standard

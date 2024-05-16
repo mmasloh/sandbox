@@ -4,16 +4,11 @@ context:
 
   cluster:
     name: kubo1
+    domain: kubo1.local
 
   apiServer:
     portOnLocalhost: 7443    # <== To configure
 
-  metallb:
-    ipRanges:
-      - first: 172.18.100.6  # <== To configure
-        last: 172.18.100.9   # <== To configure
-
   ingress:
-    urlRoot: ingress.kubo1.local
-    vip: 172.18.100.6    # <== To configure
+    url: ingress.kubo1.local
 

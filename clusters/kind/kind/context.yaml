@@ -4,16 +4,11 @@ context:
 
   cluster:
     name: kind
+    domain: kind.local
 
   apiServer:
     portOnLocalhost: 5443    # <== To configure
 
-  metallb:
-    ipRanges:
-      - first: 172.18.200.1  # <== To configure
-        last: 172.18.200.4   # <== To configure
-
   ingress:
-    urlRoot: ingress.kind.local
-    vip: 172.18.200.1    # <== To configure
+    url: ingress.kind.local
 

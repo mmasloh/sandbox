@@ -173,7 +173,9 @@ components:
         chart:
           path: ./charts/metallb-pool-0.1.0
         values: |
-          {{- toYaml .Context.metallb }}
+          ipRanges:
+            - first: {{ resolveDNS (printf "first.pool.%s" .Context.cluster.domain) }}
+              last: {{ resolveDNS (printf "last.pool.%s" .Context.cluster.domain) }}
         dependsOn:
           - main
 
@@ -189,7 +191,7 @@ components:
           controller:
             service:
               annotations:
-                metallb.universe.tf/loadBalancerIPs: {{ .Context.ingress.vip }}
+                metallb.universe.tf/loadBalancerIPs: {{ resolveDNS .Context.ingress.url }}
                 metallb.universe.tf/allow-shared-ip: "ingress"
             extraArgs:
               enable-ssl-passthrough: true
@@ -198,17 +200,6 @@ components:
     createNamespace: true
     modules:
       - name: main
-        config:
-          interval: "1m"
-          timeout: "1m"
-          persistentClient: false
-          chart:
-            reconcileStrategy: Revision # 'Revision' or  'ChartVersion'
-            interval: "1m"
-          install:
-            remediation:
-              retries: 0
-              remediateLastFailure: false
         source: skas
         chart:
           name: skas
@@ -222,7 +213,7 @@ components:
             exposure:
               external:
                 ingress:
-                  host: skas.{{ .Context.ingress.urlRoot }}
+                  host: skas.{{ .Context.ingress.url }}
             kubeconfig:
               context:
                 name: skas@{{ .Context.cluster.name }}
@@ -230,13 +221,13 @@ components:
                 {{- if .Context.apiServer }}
                 apiServerUrl: https://127.0.0.1:{{ .Context.apiServer.portOnLocalhost }}
                 {{- else }}
-                apiServerUrl: https://kubernetes.{{ .Context.ingress.urlRoot }}
+                apiServerUrl: https://kubernetes.{{ .Context.ingress.url }}
                 {{- end }}
             passwordStrength:
               forbidCommon: false    # Test against lists of common password
               minimumScore: 0       # From 0 (Accept anything) to 4
           skHConf:
-            enabled: false
+            enabled: true
             image:
               tag: 0.2.2-snapshot
               pullPolicy: Always
@@ -251,7 +242,8 @@ components:
               ssl: true
               loadBalancer:
                 enabled: true
-                ip: 192.168.56.72 # padl.kspray7.mbp
+                {{ $padl := printf "padl.%s" .Context.cluster.domain }}
+                ip: {{ resolveDNS $padl }}
                 hosts:
-                  - padl.{{ .Context.cluster.name }}.{{ .Context.rootDomain }}
+                  - {{ $padl }}
 
