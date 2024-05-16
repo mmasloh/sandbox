@@ -4,6 +4,7 @@ templates:
     config:
       interval: "1m"
       timeout:  "5m"
+      persistentClient: true
       chart:
         reconcileStrategy: Revision # 'Revision' or  'ChartVersion'
         interval: "1m"
@@ -26,6 +27,7 @@ templates:
         storageNamespace: {{ .Meta.module.namespace }}
         releaseName: {{ .Meta.module.helmReleaseName  }}
         timeout: {{ .Config.timeout }}
+        persistentClient: {{ .Config.persistentClient }}
         chart:
           spec:
             reconcileStrategy: {{ .Config.chart.reconcileStrategy }}
