@@ -225,7 +225,7 @@ components:
               forbidCommon: false    # Test against lists of common password
               minimumScore: 0       # From 0 (Accept anything) to 4
           skHConf:
-            enabled: true
+            enabled: false
             image:
               tag: 0.2.2-snapshot
               pullPolicy: Always
