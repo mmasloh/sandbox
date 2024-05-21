@@ -94,6 +94,7 @@ kubectl sk login admin admin
 kubectl sk user create sa --commonName "Serge ALEXANDRE" --email "sa@broadsoftware.com" --password as
 kubectl sk user bind sa "system:masters"
 kubectl sk user bind sa "skas-admin"
+kubectl sk user create jt --commonName "Jules TESTEUR" --email "jt@broadsoftware.com" --password tj
 kubectl sk logout
 ```
 
