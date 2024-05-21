@@ -154,11 +154,15 @@ components:
         source: flux-system
         chart:
           path: charts/cert-issuers/0.1.0
+        config:
+          install:
+            remediation:
+              retries: 10
         values: |
           {{ toYaml .Context.certIssuers }}
         dependsOn:
           - main
-          #- trust
+          - trust
 
   - name: metallb
     createNamespace: true
