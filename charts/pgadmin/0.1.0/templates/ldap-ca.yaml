@@ -1,0 +1,9 @@
+{{- if and .Values.ldap.enabled .Values.ldap.secretNsCa }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ldap-ca
+  annotations:
+    replicator.v1.mittwald.de/replicate-from: {{ .Values.ldap.secretNsCa }}
+data: {}
+{{ end }}

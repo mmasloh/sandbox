@@ -1,0 +1,32 @@
+
+{{/*
+- This image does not support runAsNonRoot. So, we need to use priviledged policy for this namespace.
+- Was unable to persist configuration data in /var/lib/pgadmin, as the launch script atemps to set some ACL on the mount point (Wich is failing)
+  and the path /var/lib/pgadmin is hardcoded.
+  Also, some workaround using subPath does not help. (This has been left commented for documention).
+
+  I think these two issues can be fixed. But, not my main focus for now.
+*/}}
+
+
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: pgadmin
+  namespace: {{ .Release.Namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: pgadmin:psp:priviledged
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: psp:privileged
+subjects:
+  - kind: ServiceAccount
+    name: pgadmin
+

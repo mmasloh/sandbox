@@ -1,0 +1,28 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: {{ include "kdp-metastore.pgClusterName" . }}
+  labels:
+    {{- include "kdp-metastore.labels" . | nindent 4 }}
+  {{- with .Values.commonAnnotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  imageName: {{ .Values.pgcluster.imageName }}
+  instances: {{ .Values.pgcluster.instances }}
+  primaryUpdateStrategy: unsupervised
+  enableSuperuserAccess: true
+  postgresql:
+    parameters:
+      max_connections: "500"
+  bootstrap:
+    initdb:
+      database: {{ .Values.pgcluster.database.name }}
+      owner: {{ .Values.pgcluster.database.owner }}
+  resources:
+    {{- toYaml .Values.pgcluster.resources | nindent 4 }}
+  storage:
+    storageClass: {{ .Values.pgcluster.storage.class }}
+    size: {{ .Values.pgcluster.storage.size }}

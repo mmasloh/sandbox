@@ -1,0 +1,105 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pgadmin
+  namespace: {{ .Release.Namespace  }}
+  labels:
+    app: pgadmin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pgadmin
+  template:
+    metadata:
+      labels:
+        app: pgadmin
+    spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+{{ if .Values.storage.enabled }}
+        fsGroup: 0    # Set drwxrwsr-x permission on mount point
+{{ end }}
+      serviceAccountName: pgadmin
+      containers:
+        - name: pgadmin
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+
+          env:
+            - name: PGADMIN_DEFAULT_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: pgadmin-admin
+                  key: email
+            - name: PGADMIN_DEFAULT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pgadmin-admin
+                  key: password
+{{- if .Values.ldap.enabled }}
+            - name: PGADMIN_CONFIG_AUTHENTICATION_SOURCES
+              value: "[{{- range $idx, $val := .Values.ldap.authSources -}}{{ if ne $idx 0 }}, {{ end }}'{{$val}}'{{- end -}}]"
+            - name: PGADMIN_CONFIG_LDAP_AUTO_CREATE_USER
+              value: "{{ if .Values.ldap.createUser }}True{{ else }}False{{ end }}"
+            - name: PGADMIN_CONFIG_LDAP_SERVER_URI
+              value: "\"{{ .Values.ldap.serverUri }}\""
+            - name: PGADMIN_CONFIG_LDAP_USERNAME_ATTRIBUTE
+              value: "\"{{ .Values.ldap.usernameAttribute }}\""
+            - name: PGADMIN_CONFIG_LDAP_SEARCH_BASE_DN
+              value: "\"{{ .Values.ldap.searchBaseDn}}\""
+            - name: PGADMIN_CONFIG_LDAP_SEARCH_FILTER
+              value: "\"{{ .Values.ldap.searchFilter}}\""
+            - name: PGADMIN_CONFIG_LDAP_SEARCH_SCOPE
+              value: "\"{{ .Values.ldap.scope}}\""
+            - name: PGADMIN_CONFIG_LDAP_USE_STARTTLS
+              value: "{{ if .Values.ldap.startTls }}True{{ else }}False{{ end }}"
+            - name: PGADMIN_CONFIG_LDAP_CA_CERT_FILE
+              value: "\"/pgadmin4/ldap/ca/ca.crt\""
+            - name: PGADMIN_CONFIG_LDAP_BIND_USER
+              value: "\"{{ .Values.ldap.bindUser }}\""
+            - name: PGADMIN_CONFIG_LDAP_BIND_PASSWORD
+              value: "\"{{ .Values.ldap.bindPassword }}\""
+{{- end }}
+{{- if .Values.oidc.enabled }}
+            - name: OAUTH2_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.oidc.client.secretName }}
+                  key: {{ .Values.oidc.client.idKey }}
+            - name: OAUTH2_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.oidc.client.secretName }}
+                  key: {{ .Values.oidc.client.secretKey }}
+{{- end }}
+          volumeMounts:
+            - mountPath: /etc/pgadmin/config_system.py
+              name: config-system
+              subPath: config_system.py
+{{- if .Values.storage.enabled }}
+            - mountPath: /var/lib/pgadmin
+              name: pgadmin-data
+              subPath: pgadmin
+{{- end }}
+{{- if .Values.ldap.enabled }}
+            - mountPath: /pgadmin4/ldap/ca
+              name: ldap-ca
+{{- end }}
+      volumes:
+        - name: config-system
+          configMap:
+            name: config-system
+{{- if .Values.storage.enabled }}
+        - name: pgadmin-data
+          persistentVolumeClaim:
+            claimName: pgadmin-claim
+{{- end }}
+{{- if .Values.ldap.enabled }}
+        - name: ldap-ca
+          secret:
+            secretName: ldap-ca
+{{- end }}
+

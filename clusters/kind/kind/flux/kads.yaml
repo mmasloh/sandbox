@@ -43,12 +43,8 @@ spec:
             - clusters/kind/kind/context.yaml
             - clusters/kind/kind/deployments
             - components
-            - templates.yaml
-        - name: kdp2
-          namespace: flux-system
-          kadFiles:
-            - components
             - parents
+            - templates.yaml
       sweepPeriod: 1m # TODO: Set to 1h after setup
     logger:
       mode: dev

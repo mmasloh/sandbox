@@ -44,12 +44,8 @@ spec:
             - clusters/kubespray/mbp64/kspray7/context.yaml
             - clusters/kubespray/mbp64/kspray7/deployments
             - components
-            - templates.yaml
-        - name: kdp2
-          namespace: flux-system
-          kadFiles:
-            - components
             - parents
+            - templates.yaml
       sweepPeriod: 2m # TODO: Set to 1h after setup
     logger:
       mode: dev

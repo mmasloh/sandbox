@@ -1,0 +1,103 @@
+sources:
+
+  - name: cnpg
+    kind: HelmRepository
+    template: helmRepository
+    config:
+      url: https://cloudnative-pg.github.io/charts
+
+
+components:
+
+  - name: cnpg
+    createNamespace: true
+    modules:
+      - name: main
+        source: cnpg
+        chart:
+          name: cloudnative-pg
+          version: 0.21.2
+
+
+  - name: minio
+    vars:
+      rootUser: TBD
+      rootPassword: TBD
+      storage:
+        driveSize: TBD
+        replicas: TBD
+        drivesPerNode: 1
+        pools: 1
+      ingressName: TBD
+    modules:
+      - name: main
+        config:
+          timeout:  "5m"
+        source: flux-system
+        chart:
+          path: ./charts/kdp-minio/5.2.0/
+        values: |
+          {{- if dig "kyverno" "namespace" "" .Context }}
+          kyverno:
+            namespace: {{ .Context.kyverno.namespace }}
+          {{- end }}
+          minio:
+            rootUser: {{ .Vars.rootUser }}
+            rootPassword: {{ .Vars.rootPassword }}
+            clusterIssuer: {{ .Context.certificateIssuer.internal }}
+            tls:
+              enabled: true
+            persistence:
+              storageClass: {{ .Context.storageClass.data }}
+              size: {{ .Vars.storage.driveSize }}
+            drivesPerNode: {{ .Vars.storage.drivesPerNode }}
+            replicas: {{ .Vars.storage.replicas }}
+            mode: {{ if ne .Vars.storage.replicas 1 }}distributed{{else}}standalone{{end}}
+            pools: {{ .Vars.storage.pools }}
+            ingress:
+              hosts:
+                - {{ required ".Vars.ingressName is required" .Vars.ingressName }}.{{ .Context.ingress.url }}
+            consoleIngress:
+              annotations:
+                cert-manager.io/cluster-issuer: {{ .Context.certificateIssuer.public }}
+              hosts:
+                - {{ .Vars.ingressName}}-console.{{ .Context.ingress.url }}
+              tls:
+                - secretName: {{ .Meta.deployment.name }}-console-tls
+                  hosts:
+                    - {{ .Vars.ingressName}}-console.{{ .Context.ingress.url }}
+            ingressExt:
+              enabled: {{ ne .Context.certificateIssuer.public .Context.certificateIssuer.internal }}
+              clusterIssuer: {{ .Context.certificateIssuer.public }}
+              host: {{ .Vars.ingressName }}-ext.{{ .Context.ingress.url }}
+            {{- if and .Vars.topology .Context.minio }}
+            {{- if .Context.minio.topologies }}
+            {{- $topology := get .Context.minio.topologies .Vars.topology }}
+            topologySpreadConstraints:
+              - maxSkew: 1
+                whenUnsatisfiable: DoNotSchedule
+                topologyKey: "{{ $topology.topologyKey }}"
+                #nodeAffinityPolicy: Honor
+                labelSelector:
+                  matchLabels:
+                    app: minio
+                #matchLabelKeys:
+                #  - controller-revision-hash
+            affinity:
+              nodeAffinity:
+                requiredDuringSchedulingIgnoredDuringExecution:
+                  nodeSelectorTerms:
+                    - matchExpressions:
+                        - key: "{{ $topology.topologyKey }}"
+                          operator: In
+                          values:
+                            {{- toYaml $topology.zones | nindent 24 }}
+            {{- end }}
+            {{- end }}
+            {{- if .Vars.ldap }}
+            {{- toYaml (get .Context.minio.ldapSettings  .Vars.ldap) | nindent 10 }}
+            {{- end }}
+            users: []
+          
+          
+          

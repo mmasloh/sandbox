@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-system
+  namespace: {{ .Release.Namespace  }}
+data:
+  config_system.py: |
+    # config_system.py
+    {{- if .Values.oidc.enabled }}
+    import os
+    import requests
+    requests.packages.urllib3.disable_warnings()
+    from urllib3.exceptions import InsecureRequestWarning
+    from urllib3 import disable_warnings
+    disable_warnings(InsecureRequestWarning)
+
+    AUTHENTICATION_SOURCES = [{{- range $idx, $val := .Values.oidc.authSources -}}{{ if ne $idx 0 }}, {{ end }}'{{$val}}'{{- end -}}]
+    OAUTH2_AUTO_CREATE_USER = {{ if .Values.oidc.createUser }}True{{ else }}False{{ end }}
+    OAUTH2_CONFIG = [
+        {
+            'OAUTH2_NAME': '{{ .Values.oidc.name }}',
+            'OAUTH2_DISPLAY_NAME': '{{ .Values.oidc.displayName }}',
+            'OAUTH2_CLIENT_ID': os.getenv('OAUTH2_CLIENT_ID'),
+            'OAUTH2_CLIENT_SECRET': os.getenv('OAUTH2_CLIENT_SECRET'),
+            'OAUTH2_TOKEN_URL': '{{ .Values.oidc.tokenUrl }}',
+            'OAUTH2_AUTHORIZATION_URL': '{{ .Values.oidc.authorizationUrl }}',
+            'OAUTH2_SERVER_METADATA_URL': {{if .Values.oidc.metadataUrl}}'{{ .Values.oidc.metadataUrl }}'{{else}}None{{end}},
+            'OAUTH2_API_BASE_URL': '{{ .Values.oidc.apiBaseUrl }}',
+            'OAUTH2_USERINFO_ENDPOINT': '{{ .Values.oidc.userInfoEndpoint }}',
+            'OAUTH2_SCOPE': '{{ .Values.oidc.scope }}',
+            'OAUTH2_USERNAME_CLAIM': {{if .Values.oidc.usernameClaim}}'{{ .Values.oidc.usernameClaim }}'{{else}}None{{end}},
+            'OAUTH2_ICON': None,
+            'OAUTH2_BUTTON_COLOR': None,
+            'OAUTH2_ADDITIONAL_CLAIMS': None,
+            'OAUTH2_SSL_CERT_VERIFICATION': False
+        }
+    ]
+    {{- end }}

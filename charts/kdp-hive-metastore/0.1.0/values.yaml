@@ -1,0 +1,65 @@
+
+
+# -- Allow chart name overriding
+nameOverride:
+# -- Allow overriding base name of all resources
+fullNameOverride: kdp-hive-metastore    # Must match hive-metastore.db.host
+# -- Will default to {{ include "kdp-metastore.fullname" . }}
+pgclusterName:
+
+
+# Allow an explicit, direct secret creation. Use only in early tests
+
+s3Secret:
+  accessKey:
+  secretKey:
+
+# -- Annotations to be added to all resources
+commonAnnotations: {}
+
+hive-metastore:
+  enabled: true
+  db:
+    host: kdp-hive-metastore-pg-rw  # <pgcluster.fullNameOverride>-pg-rw
+    user:
+      password:
+        secretName: kdp-hive-metastore-pg-app
+        propertyName: password
+
+  s3:
+    url:
+    accessKey:
+      secretName: # TBD
+      propertyName: # TBD
+    secretKey:
+      secretName: # TBD
+      propertyName: # TBD
+
+  networkPolicies:
+    enabled: true
+    allowedNamespaceLabels: {}  # TBD
+    allowedNamespace: [] # TBD
+
+  initJob:
+    ttlSecondsAfterFinished: 600
+
+pgcluster:
+  # Refer to https://github.com/cloudnative-pg/postgres-containers/pkgs/container/postgresql
+  # for available version
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.2-10  # 15.5-9 or 16.2-10
+  instances: 2
+  storage:
+    class: # TBD
+    size: "1Gi"
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "1"
+    limits:
+      memory: "1Gi"
+      cpu: "2"
+  database:
+    name: hms
+    owner: hms
+
+

@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "dexgate.name" . }}
+  namespace: {{ .Release.Namespace  }}
+  labels:
+    app: {{ include "dexgate.name" . }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 9001
+      targetPort: http
+      protocol: TCP
+  selector:
+    app: {{ include "dexgate.name" . }}
+

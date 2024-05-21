@@ -34,7 +34,7 @@ components:
           ingress:
             enabled: false
       - name: dex
-        source: kdp2
+        source: flux-system
         chart:
           path: ./charts/dex/2.36.0
         values: |
@@ -52,7 +52,7 @@ components:
           connectors:
             {{- toYaml (get .Context.dex.connectors .Vars.dex.connector)  | nindent 12 }}
       - name: dexgate
-        source: kdp2
+        source: flux-system
         chart:
           path: ./charts/dexgate/0.1.2
         values: |

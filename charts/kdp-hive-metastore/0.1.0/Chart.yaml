@@ -1,0 +1,7 @@
+apiVersion: v2
+name: kdp-hive-metastore
+version: 0.1.0
+dependencies:
+  - name: hive-metastore
+    version: 0.1.0-chart
+    repository: oci://quay.io/sergealexandre

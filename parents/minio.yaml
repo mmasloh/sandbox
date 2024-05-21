@@ -1,0 +1,43 @@
+
+deployments:
+
+  - name: minio-small-1
+    abstract: true
+    parent: minio-small
+    vars:
+      storage:
+        driveSize: "10G"
+        replicas: 1
+
+  - name: minio-small-4
+    abstract: true
+    parent: minio-small
+    vars:
+      storage:
+        driveSize: "5G"
+        replicas: 4
+
+  - name: minio-small
+    abstract: true
+    component: minio
+    vars:
+      rootUser: minio
+      rootPassword: minio123
+      storage:
+        drivesPerNode: 1
+        pools: 1
+      ingressExt:
+        enabled: true
+    modules:
+      - name: main
+        values:
+          minio:
+            resources:
+              requests:
+                memory: "2Gi"
+                cpu: "250m"
+    dependsOn:
+      - deployment: metallb
+        module: main
+      - deployment: cert-manager
+        module: issuers

@@ -1,0 +1,95 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "dexgate.name" . }}
+  namespace: {{ .Release.Namespace  }}
+  labels:
+    app: {{ include "dexgate.name" . }}
+  annotations:
+    configmap.reloader.stakater.com/reload: "{{ include "dexgate.name" . }}-config"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "dexgate.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "dexgate.name" . }}
+    spec:
+      serviceAccountName: {{ include "dexgate.name" . }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+      - name: {{ include "dexgate.name" . }}
+        args:
+          - --config
+          - /conf/config.yaml
+{{ if .Values.oidc.ca.crt }}
+          - --oidcRootCAFile
+          - /issuerca/ca.crt
+{{ end }}
+        image: {{ .Values.image }}
+        imagePullPolicy: {{ .Values.imagePullPolicy }}
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+        env:
+          {{ if .Values.oidc.clientID.secret.name }}
+          - name: CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.oidc.clientID.secret.name}}
+                key: {{ .Values.oidc.clientID.secret.key }}
+          {{ end }}
+          {{ if .Values.oidc.clientSecret.secret.name }}
+          - name: CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.oidc.clientSecret.secret.name }}
+                key: {{ .Values.oidc.clientSecret.secret.key }}
+          {{ end }}
+        ports:
+          - containerPort: 9001
+            name: http
+            protocol: TCP
+        resources:
+          {{ toYaml .Values.resources | nindent 10 }}
+        volumeMounts:
+          - mountPath: /conf
+            name: configmap-config
+{{ if .Values.oidc.ca.crt }}
+          - mountPath: /issuerca
+            name: issuer-ca
+{{ end }}
+      volumes:
+      - name: configmap-config
+        configMap:
+          name: {{ include "dexgate.name" . }}-config
+          defaultMode: 420
+          items:
+          - key: config.yaml
+            mode: 420
+            path: config.yaml
+{{ if .Values.oidc.ca.crt }}
+      - name: issuer-ca
+        secret:
+          secretName: {{ include "dexgate.name" . }}-oidc-ca
+          defaultMode: 420
+          items:
+            - key: ca.crt
+              mode: 420
+              path: ca.crt
+{{ end }}
+
+
+
