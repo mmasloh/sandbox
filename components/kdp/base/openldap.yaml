@@ -29,6 +29,9 @@ components:
               adminPassword: {{ .Vars.adminPassword }}
               configUser: {{ .Vars.configUser }}
               configPassword: {{ .Vars.configPassword }}
+            initTLSSecret:
+              tls_enabled: true
+              secret: {{ .Meta.module.helmReleaseName }}-cert    
             persistence:
               storageClass: {{ .Context.storageClass.data }}
             phpldapadmin:
