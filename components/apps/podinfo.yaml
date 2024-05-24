@@ -39,7 +39,7 @@ components:
         chart:
           path: ./charts/dex/2.36.0
         values: |
-          nameOverride: podinfo-dex
+          nameOverride: {{ .Meta.deployment.name }}-dex
           logger:
             level: debug
           ingress:
@@ -47,7 +47,7 @@ components:
             clusterIssuer: {{ .Context.certificateIssuer.public  }}
           firstStaticClient:
             name: "podinfo"
-            id: "pi-dg"
+            id: "{{ .Meta.deployment.name }}-dg"
             redirectURIs:
               - https://{{ .Vars.ingress }}.{{ .Context.ingress.url }}/dg_callback
           connectors:
@@ -66,11 +66,11 @@ components:
           oidc:
             clientID:
               secret:  
-                name: pi-dg-client-secret
+                name: {{ .Meta.deployment.name }}-dg-client-secret
                 key: clientId              
             clientSecret:
               secret:  
-                name: pi-dg-client-secret
+                name: {{ .Meta.deployment.name }}-dg-client-secret
                 key: clientSecret              
             issuerURL: https://dex.{{ .Vars.ingress }}.{{ .Context.ingress.url }}/dex
             ca:

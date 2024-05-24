@@ -21,8 +21,6 @@ deployments:
     vars:
       allowedGroups:
         - devs
-      dex:
-        connector: skas
       ingress: podinfo2
     dependsOn:
       - deployment: ingress-nginx
