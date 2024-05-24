@@ -26,16 +26,16 @@ openldap-stack-ha:
     storageClass: # TBD
 
   ltb-passwd:
-    enabled : true
-    ingress:
-      enabled: true
-      ingressClassName: nginx
-      annotations:
-        cert-manager.io/cluster-issuer: # TBD
-      hosts: [] # TBD
-      tls:
-        - hosts: [] # TBD
-          secretName: ltb-passwd-tls
+    enabled : false
+  #    ingress:
+  #      enabled: true
+  #      ingressClassName: nginx
+  #      annotations:
+  #        cert-manager.io/cluster-issuer: # TBD
+  #      hosts: [] # TBD
+  #      tls:
+  #        - hosts: [] # TBD
+  #          secretName: ltb-passwd-tls
 
   phpldapadmin:
     enabled: true
