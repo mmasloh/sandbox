@@ -76,6 +76,9 @@ components:
             ca:
               crt: {{ .Context.publicCA }}
           users:
-            allowedUsers: {{ .Vars.allowedUsers }}
-            allowedGroups: {{ .Vars.allowedGroups }}
-            allowedEmails: {{ .Vars.allowedEmails }}
+            allowedUsers: 
+            {{- toYaml .Vars.allowedUsers | nindent 8 }}
+            allowedEmails: 
+            {{- toYaml .Vars.allowedEmails | nindent 8 }}
+            allowedGroups:
+            {{- toYaml .Vars.allowedGroups | nindent 8 }}

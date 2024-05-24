@@ -9,6 +9,7 @@ deployments:
       allowedGroups:
         - podinfo
         - devs
+        - system:masters
     dependsOn:
       - deployment: ingress-nginx
         module: main
