@@ -215,6 +215,10 @@ components:
           image:
             tag: 0.2.2-snapshot
             pullPolicy: Always
+          skMerge:
+            providers:
+              - name: crd
+              - name: ldap
           skAuth:
             exposure:
               external:
