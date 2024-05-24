@@ -76,8 +76,6 @@ context:
                 - userAttr: uid
                   groupAttr: memberUid
               nameAttr: cn
-
-
       ldap1:
         - type: ldap
           id: ldap
