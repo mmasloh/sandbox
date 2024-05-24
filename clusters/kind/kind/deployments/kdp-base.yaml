@@ -17,7 +17,7 @@ deployments:
     namespace: cnpg
 
   - name: openldap
-    enabled: true
+    enabled: false
     component: openldap
     namespace: openldap
     vars:
