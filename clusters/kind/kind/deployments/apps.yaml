@@ -8,7 +8,6 @@ deployments:
     vars:
       allowedGroups:
         - podinfo
-        - system:masters
         - devs
     dependsOn:
       - deployment: ingress-nginx
