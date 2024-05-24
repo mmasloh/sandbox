@@ -15,7 +15,7 @@ deployments:
         module: main
 
   - name: podinfo2
-    enabled: false
+    enabled: true
     component: podinfo
     namespace: podinfo2
     vars:
