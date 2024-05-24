@@ -7,7 +7,24 @@ deployments:
     namespace: podinfo
     vars:
       allowedGroups:
-        - skas-admin
+        - podinfo
+        - system:masters
+        - devs
     dependsOn:
       - deployment: ingress-nginx
         module: main
+
+  - name: podinfo2
+    enabled: true
+    component: podinfo
+    namespace: podinfo2
+    vars:
+      allowedGroups:
+        - devs
+      dex:
+        connector: skas
+      ingress: podinfo2
+    dependsOn:
+      - deployment: ingress-nginx
+        module: main
+
