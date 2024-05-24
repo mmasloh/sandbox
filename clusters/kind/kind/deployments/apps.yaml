@@ -22,6 +22,8 @@ deployments:
       allowedGroups:
         - devs
       ingress: podinfo2
+      dex:
+        connector: openldap
     dependsOn:
       - deployment: ingress-nginx
         module: main
