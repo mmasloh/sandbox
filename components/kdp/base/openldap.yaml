@@ -1,0 +1,55 @@
+
+
+components:
+
+  - name: openldap
+    vars:
+      replicaCount: 3
+      ldapDomain: # TBD (i.e: example.com)
+      adminUser: admin
+      adminPassword: # TBD
+      configUser: "admin"
+      configPassword: # TBD
+    modules:
+      - name: main
+        config:
+          timeout: "5m"
+        source: flux-system
+        chart:
+          path: ./charts/openldap/4.2.2/
+        values: |
+          openldap-stack-ha:
+            replicaCount: {{ .Vars.replicaCount }}
+            replication:
+              enabled: {{ if ne .Vars.replicaCount 1 }}true{{else}}false{{end}}
+            clusterIssuer: {{ .Context.certificateIssuer.public }}
+            global:
+              ldapDomain: {{ .Vars.ldapDomain }}
+              adminUser: {{ .Vars.adminUser }}
+              adminPassword: {{ .Vars.adminPassword }}
+              configUser: {{ .Vars.configUser }}
+              configPassword: {{ .Vars.configPassword }}
+            persistence:
+              storageClass: {{ .Context.storageClass.data }}
+            phpldapadmin:
+              ingress:
+                annotations:
+                  cert-manager.io/cluster-issuer:  {{ .Context.certificateIssuer.public }}
+                hosts:
+                  - phpldapadmin.{{ .Context.ingress.url }}
+                tls:
+                  - hosts:
+                      - phpldapadmin.{{ .Context.ingress.url }}
+                    secretName: phpldapadmin-tls
+            service:
+              {{ $ldap := printf "ldap.%s" .Context.cluster.domain }}
+              annotations:
+                metallb.universe.tf/loadBalancerIPs: {{ resolveDNS $ldap }}
+              hosts:
+                - {{ $ldap }}
+
+            # Custom openldap configuration files used to override default settings
+            # DO NOT FORGET to put the Root Organisation object as it won't be created while using customLdifFiles
+            # To generate passwords: 'slappasswd -s myPassword' on an ldap node
+            customLdifFiles:
+              {{ toYaml .Context.openldap.customLdifFiles | nindent 10 }}
