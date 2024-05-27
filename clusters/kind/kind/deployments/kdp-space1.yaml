@@ -33,9 +33,16 @@ deployments:
     component: workspace
     vars:
       namespace: space1
-#    modules:
-#      - name: main
-#        values:
+    modules:
+      - name: main
+        values:
+          secrets:
+            - name: minio
+              keys:
+                - key: accessKey
+                  value: minio
+                - key: secretKey
+                  value: minio123
 #          serviceAccount:
 #            name: spark
 #            create: true
