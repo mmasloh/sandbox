@@ -71,6 +71,6 @@ components:
       - name: main
         source: flux-system
         chart:
-          path: ./chart/kdp-workspace/0.1.0
+          path: ./charts/kdp-workspace/0.1.0
         values: |
           namespace: {{ .Vars.namespace }}
