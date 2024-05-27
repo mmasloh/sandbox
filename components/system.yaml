@@ -203,6 +203,15 @@ components:
   - name: skas
     createNamespace: true
     modules:
+      - name: skusers
+        source: skas
+        chart:
+          name: skusers
+          version: 0.3.0
+        dependsOn:
+          - main
+        values: |
+          {{- toYaml .Context.skas.skusers | nindent 6 }}
       - name: main
         config:
           timeout:  "5m"

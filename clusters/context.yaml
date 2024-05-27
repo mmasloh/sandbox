@@ -241,4 +241,19 @@ context:
         mail: alext@odp.com
         userpassword: alext123
 
+  skas:
+    skusers:
+      userByLogin:
+        sa:
+          commonName: Serge ALEXANDRE
+          email: "sa@broadsoftware.com"
+          passwordHash: "$2a$10$BZ2Mblv.FqJao5nojz/qkeZOKeWRa4LNff8H45U6aiXIXUNp4qceC"
+      bindingByName:
+        sa.system:masters:
+          user: sa
+          group: system:masters
+        sa.skas-admin:
+          user: sa
+          group: skas-admin
+
 
