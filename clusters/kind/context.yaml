@@ -8,14 +8,3 @@ context:
 
   networkPoliciesSupport: false
 
-  skas:
-    skusers:
-      bindingByName:
-        sa.podinfo:
-          user: sa
-          group: podinfo
-        sergea.podinfo:
-          user: sergea
-          group: podinfo
-
-

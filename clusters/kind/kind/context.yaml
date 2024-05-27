@@ -12,3 +12,14 @@ context:
   ingress:
     url: ingress.kind.local
 
+  skas:
+    skusers:
+      bindingByName:
+        sa.podinfo:
+          user: sa
+          group: podinfo
+        sergea.podinfo:
+          user: sergea
+          group: podinfo
+
+
