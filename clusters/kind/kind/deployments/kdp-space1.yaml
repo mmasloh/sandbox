@@ -33,9 +33,9 @@ deployments:
     component: workspace
     vars:
       namespace: space1
-    modules:
-      - name: main
-        values:
-          serviceAccount:
-            name: spark
-            create: true
+#    modules:
+#      - name: main
+#        values:
+#          serviceAccount:
+#            name: spark
+#            create: true
