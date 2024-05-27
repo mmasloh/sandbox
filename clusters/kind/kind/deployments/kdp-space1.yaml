@@ -27,3 +27,9 @@ deployments:
       - deployment: cnpg
         module: main
 
+  - name: space1-workspace
+    enabled: true
+    namespace: space1-sys
+    component: workspace
+    vars:
+      namespace: space1

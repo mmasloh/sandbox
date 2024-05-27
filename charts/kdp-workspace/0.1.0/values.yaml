@@ -1,0 +1,10 @@
+
+namespace: # TBD
+
+serviceAccount:
+  name: default
+  create: false
+
+role:
+  name: spark
+  manageJobs: true

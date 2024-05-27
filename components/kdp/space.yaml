@@ -31,6 +31,7 @@ components:
               password: {{ .Vars.admin.password }}
 
   - name: hive-metastore
+    createNamespace: true
     vars:
       s3access:
         url: # TBD
@@ -61,3 +62,15 @@ components:
           pgcluster:
             storage:
               storageClass: {{ .Context.storageClass.data }}
+
+  - name: workspace
+    createNamespace: true
+    vars:
+      namespace: # TBD
+    modules:
+      - name: main
+        source: flux-system
+        chart:
+          path: ./chart/kdp-workspace/0.1.0
+        values: |
+          namespace: {{ .Vars.namespace }}

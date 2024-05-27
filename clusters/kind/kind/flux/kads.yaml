@@ -36,7 +36,7 @@ spec:
     config:
       primarySources:
         - name: flux-system
-          namespace: flux-system
+          namespace: flux-syystem
           kadFiles:
             - clusters/context.yaml
             - clusters/kind/context.yaml
