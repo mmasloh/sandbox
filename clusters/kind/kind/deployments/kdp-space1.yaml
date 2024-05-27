@@ -33,3 +33,7 @@ deployments:
     component: workspace
     vars:
       namespace: space1
+    values:
+      serviceAccount:
+        name: spark
+        create: true
