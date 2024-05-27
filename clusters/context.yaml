@@ -245,8 +245,10 @@ context:
     skusers:
       userByLogin:
         sa:
-          commonName: Serge ALEXANDRE
-          email: "sa@broadsoftware.com"
+          commonName:
+          - Serge ALEXANDRE
+          email:
+          - "sa@broadsoftware.com"
           passwordHash: "$2a$10$BZ2Mblv.FqJao5nojz/qkeZOKeWRa4LNff8H45U6aiXIXUNp4qceC"
       bindingByName:
         sa.system-masters:
