@@ -1,6 +1,24 @@
 
 components:
 
+  - name: secrets
+    createNamespace: true
+    vars:
+      secrets: []
+      #  - name:
+      #    data:
+      #      - key:
+      #        value:
+    modules:
+      - name: main
+        source: flux-system
+        chart:
+          path: ./charts/kdp-secrets/0.1.0
+        values: |
+          secrets:
+            {{- toYaml .Vars.secrets | nindent 10 }}
+
+
   - name: pgadmin
     createNamespace: true
     vars:

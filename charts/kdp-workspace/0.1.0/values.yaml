@@ -9,8 +9,3 @@ role:
   name: spark
   manageJobs: true
 
-secrets: []
-#  - name:
-#    keys:
-#      - key:
-#        values:

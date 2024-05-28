@@ -2,6 +2,7 @@
 
 deployments:
 
+
   - name: space1-pgadmin
     component: pgadmin
     namespace: space1-sys
@@ -33,16 +34,32 @@ deployments:
     component: workspace
     vars:
       namespace: space1
-    modules:
-      - name: main
-        values:
-          secrets:
-            - name: minio
-              keys:
-                - key: accessKey
-                  value: minio
-                - key: secretKey
-                  value: minio123
-#          serviceAccount:
-#            name: spark
-#            create: true
+
+  - name: space1-secrets
+    component: secrets
+    namespace: space1
+    vars:
+      secrets:
+        - name: minio
+          data:
+            - key: accessKey
+              value: minio
+            - key: secretKey
+              value: minio123
+    dependsOn:
+      - deployment: space1-workspace
+        module: main
+
+  - name: space1-sys-secrets
+    component: secrets
+    namespace: space1-sys
+    vars:
+      secrets:
+        - name: minio
+          data:
+            - key: accessKey
+              value: minio
+            - key: secretKey
+              value: minio123
+
+
