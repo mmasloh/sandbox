@@ -63,7 +63,7 @@ components:
         chart:
           path: ./charts/kdp-hive-metastore/0.1.0
         values: |
-          fullNameOverride: hive-metastore-main   # Was based on releaseName, which contains the namespace
+          # fullNameOverride: hive-metastore-main   # Was based on releaseName, which contains the namespace
           s3Secret:
             accessKey: {{ .Vars.s3access.accessKey }}
             secretKey: {{ .Vars.s3access.secretKey }}
