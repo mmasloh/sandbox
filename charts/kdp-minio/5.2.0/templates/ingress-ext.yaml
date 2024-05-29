@@ -11,6 +11,7 @@ metadata:
   name: minio-ext
   namespace: {{ .Release.Namespace  }}
   annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 130m   # As minio put uses chunk of 128MB
   {{ if and .Values.minio.clusterIssuer .Values.minio.ingressExt.clusterIssuer }}
     # SSL both on input and output
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
