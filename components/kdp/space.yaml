@@ -68,6 +68,7 @@ components:
             accessKey: {{ .Vars.s3access.accessKey }}
             secretKey: {{ .Vars.s3access.secretKey }}
           hive-metastore:
+            serviceName: hive-metastore # Default was <namespace>-hive-metastore-main
             s3:
               url: {{ .Vars.s3access.url }} 
               accessKey:
