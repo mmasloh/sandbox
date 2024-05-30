@@ -6,7 +6,7 @@ context:
     name: kind-kind-kubotal
 
   apiServer:
-    portOnLocalhost: 61564    # <== To configure
+    portOnLocalhost: 53834    # <== To configure
 
   metallb:
     ipRanges:
