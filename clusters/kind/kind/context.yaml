@@ -3,7 +3,7 @@
 context:
 
   cluster:
-    name: kind
+    name: kind-kind-kubotal
 
   apiServer:
     portOnLocalhost: 61564    # <== To configure
