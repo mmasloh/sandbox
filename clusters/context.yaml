@@ -240,6 +240,15 @@ context:
         uid: alext
         mail: alext@odp.com
         userpassword: alext123
+        
+        dn: uid=mmasloh,ou=Users,dc=odp,dc=com
+        cn: Mohamed MASLOH
+        objectclass: inetOrgPerson
+        objectclass: top
+        sn: MASLOH
+        uid: mmasloh
+        mail: mmasloh@odp.com
+        userpassword: mmasloh123
 
   skas:
     skusers:
