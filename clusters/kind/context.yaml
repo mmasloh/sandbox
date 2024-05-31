@@ -5,6 +5,8 @@ context:
   storageClass:
     data: standard
     workspace: standard
+  cluster:
+    domain: kind.local
 
   networkPoliciesSupport: false
 
