@@ -1,0 +1,62 @@
+#
+
+
+openldap-stack-ha:
+
+  replicaCount: # TBD
+
+  replication:
+    enabled: # TBD (false if replicaCount == 1)
+
+  clusterIssuer: # TBD
+
+  global:
+    ldapDomain: # TBD
+    adminUser: "admin"
+    adminPassword: # TBD
+    configUserEnabled: true
+    configUser: "admin"
+    configPassword: # TBD
+
+  initTLSSecret:
+    tls_enabled: true
+    secret: openldap-cert
+
+  persistence:
+    storageClass: # TBD
+
+  ltb-passwd:
+    enabled : false
+  #    ingress:
+  #      enabled: true
+  #      ingressClassName: nginx
+  #      annotations:
+  #        cert-manager.io/cluster-issuer: # TBD
+  #      hosts: [] # TBD
+  #      tls:
+  #        - hosts: [] # TBD
+  #          secretName: ltb-passwd-tls
+
+  phpldapadmin:
+    enabled: true
+    ingress:
+      enabled: true
+      ingressClassName: nginx
+      annotations:
+        cert-manager.io/cluster-issuer: # TBD
+      hosts: [] # TBD
+      tls:
+        - hosts: [] # TBD
+          secretName: phpldapadmin-tls
+
+  service:
+    annotations:
+      metallb.universe.tf/loadBalancerIPs: # TBD
+    type: LoadBalancer
+    sessionAffinity: None
+    hosts: [] # TBD
+
+  # Custom openldap configuration files used to override default settings
+  # DO NOT FORGET to put the Root Organisation object as it won't be created while using customLdifFiles
+  # To generate passwords: 'slappasswd -s myPassword' on an ldap node
+  customLdifFiles: {} # TBD

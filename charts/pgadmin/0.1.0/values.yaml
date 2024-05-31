@@ -1,0 +1,71 @@
+
+kyverno:
+  namespace:  # Fill it if kyverno is deployed, in order to add exception
+
+
+image:
+  repository: dpage/pgadmin4
+  tag:
+  pullPolicy: Always
+
+
+storage:
+  enabled: false
+  class: default
+  size: 50M
+ingress:
+  host:
+  clusterIssuer:
+
+extraEnv:
+
+admin:
+  # One and only one of the following must be defined (Better to use vault value)
+  # vault will need external secret
+  value:
+    email:
+    password:
+  vault:
+    secretStore:
+    vaultPath:
+
+
+ldap:
+  enabled: no
+  authSources:
+    - ldap
+    #- internal
+  createUser: no
+  serverUri: # TBD (i.e ldaps://...)
+  usernameAttribute: # TBD (uid, cn, ...)
+  searchBaseDn: # TBD
+  searchFilter: # TBD
+  scope: # TBD
+  startTls: false
+  bindUser: # TBD
+  bindPassword: # TBD
+  secretNsCa: # TBD i.e: cert-manager/cluster-issuer-ca
+
+oidc:
+  enabled: no
+  authSources:
+    - oauth2
+    #- internal
+  createUser:
+  name:
+  displayName:
+  clientId:
+  clientSecret:
+#  client:
+#    secretName:
+#    idKey:
+#    secretKey:
+  tokenUrl:
+  authorizationUrl:
+  metadataUrl:
+  apiBaseUrl:
+  userInfoEndpoint:
+  scope:   # i.e 'openid email profile'
+  usernameClaim:
+  additionalClaims:
+  sslCertVerification: no # As no way to provide a certificate ?

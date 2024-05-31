@@ -1,0 +1,7 @@
+apiVersion: v2
+name: kdp-openldap
+version: 4.2.2
+dependencies:
+  - name: openldap-stack-ha
+    version: 4.2.2
+    repository: https://jp-gouin.github.io/helm-openldap/

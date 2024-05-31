@@ -1,0 +1,21 @@
+{{- if and (index .Values  "openldap-stack-ha" "initTLSSecret" "tls_enabled" ) (index .Values "openldap-stack-ha" "initTLSSecret" "secret") }}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ template "openldap.fullname" . }}
+spec:
+  dnsNames:
+    - {{ template "openldap.fullname" . }}
+    - {{ template "openldap.fullname" . }}.{{ .Release.Namespace }}
+    - {{ template "openldap.fullname" . }}.{{ .Release.Namespace }}.svc
+    - localhost
+    {{- range index .Values "openldap-stack-ha" "service" "hosts" }}
+    - {{ . }}
+    {{- end }}
+  secretName: {{ template "openldap.fullname" . }}-cert
+  issuerRef:
+    kind: ClusterIssuer
+    name: {{ index .Values "openldap-stack-ha" "clusterIssuer" }}
+{{ end }}
+
