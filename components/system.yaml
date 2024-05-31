@@ -264,7 +264,7 @@ components:
                 annotations:
                   cert-manager.io/cluster-issuer:  {{ .Context.certificateIssuer.public }}
                 hosts:
-                  - phpldapadmin.{{ .Context.ingress.url }}
+                  - phpldapadmin.{{ .Context.ingress.urlRoot }}
                 tls:
                   - hosts:
                       - phpldapadmin.{{ .Context.ingress.urlRoot }}
