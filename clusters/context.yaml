@@ -231,15 +231,6 @@ context:
         uid: alaint
         mail: alaint@odp.com
         userpassword: alaint123
-
-        dn: uid=alext,ou=Users,dc=odp,dc=com
-        cn: Alex TERIEUR
-        objectclass: inetOrgPerson
-        objectclass: top
-        sn: TERIEUR
-        uid: alext
-        mail: alext@odp.com
-        userpassword: alext123
         
         dn: uid=mmasloh,ou=Users,dc=odp,dc=com
         cn: Mohamed MASLOH
