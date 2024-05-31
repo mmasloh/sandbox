@@ -267,7 +267,7 @@ components:
                   - phpldapadmin.{{ .Context.ingress.url }}
                 tls:
                   - hosts:
-                      - phpldapadmin.{{ .Context.ingress.url }}
+                      - phpldapadmin.{{ .Context.ingress.urlRoot }}
                     secretName: phpldapadmin-tls
             service:
               {{ $ldap := printf "ldap.%s" .Context.cluster.domain }}
