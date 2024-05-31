@@ -41,3 +41,6 @@ deployments:
       - deployment: ingress-nginx
         module: main
 
+  - name: longhorn
+    component: longhorn
+    namespace: longhorn

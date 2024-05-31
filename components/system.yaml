@@ -272,7 +272,7 @@ components:
             service:
               {{ $ldap := printf "ldap.%s" .Context.cluster.domain }}
               annotations:
-                metallb.universe.tf/loadBalancerIPs: {{ .Context.cluster.domain }}
+                metallb.universe.tf/loadBalancerIPs: {{ .Context.ingress.vip }}
               hosts:
                 - {{ $ldap }}
           
@@ -281,3 +281,18 @@ components:
             # To generate passwords: 'slappasswd -s myPassword' on an ldap node
             customLdifFiles:
               {{ toYaml .Context.openldap.customLdifFiles | nindent 10 }}
+
+  - name: longhorn
+    modules:
+      - name: main
+        config:
+          timeout: "5m"
+        source: flux-system
+        chart:
+          path: ./charts/longhorn
+        values: |
+          ingress:
+            enabled: true
+            ingressClassName: nginx
+            host: longhorn.{{ .Context.ingress.urlRoot }}
+            path: /
