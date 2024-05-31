@@ -272,7 +272,7 @@ components:
             service:
               {{ $ldap := printf "ldap.%s" .Context.cluster.domain }}
               annotations:
-                metallb.universe.tf/loadBalancerIPs: {{ .Context.metallb.ipRanges.last }}
+                metallb.universe.tf/loadBalancerIPs: {{ .Context.ingress.vip2 }}
               hosts:
                 - {{ $ldap }}
           

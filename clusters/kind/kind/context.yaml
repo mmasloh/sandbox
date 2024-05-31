@@ -16,4 +16,4 @@ context:
   ingress:
     urlRoot: ingress.kind.local
     vip: 172.19.200.1    # <== To configure
-
+    vip2: 172.19.200.4
