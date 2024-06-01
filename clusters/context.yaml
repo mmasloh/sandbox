@@ -185,6 +185,7 @@ context:
         cn: ops
         memberUid: sergea
         memberUid: moncefl
+        memberUid: mmasloh
 
       05-first-users.ldif: |-
         dn: uid=sergea,ou=Users,dc=odp,dc=com
